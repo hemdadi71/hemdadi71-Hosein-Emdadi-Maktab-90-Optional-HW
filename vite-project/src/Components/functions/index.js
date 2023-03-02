@@ -37,6 +37,7 @@ const fun = () => {
     if (submit.value === "افزودن") {
       state.push(data);
       renderList(state);
+
       form.reset();
     } else if (submit.value === "ویرایش") {
       state = state.map((item) => {
@@ -52,7 +53,9 @@ const fun = () => {
       form.reset();
       handleHideModal();
     }
+    localStorage.setItem("items", JSON.stringify(state));
   };
+  
   //   ....................................................................................
   const handleDeleteItem = (id) => {
     const filterItem = state.filter((item) => item.id !== id);
@@ -79,7 +82,6 @@ const fun = () => {
       item.classList.remove("border-green-500");
       item.classList.remove("border-red-500");
     });
-    
   };
   //   ..................................................................................
   const renderList = (arr) => {
@@ -171,14 +173,14 @@ const fun = () => {
     const inputL = form.lastName.value;
     const inputE = form.email.value;
     const inputP = form.phone.value;
-    if (inputF && 5 < inputF.length && inputF.length < 25) {
+    if (inputF && 3 < inputF.length && inputF.length < 25) {
       valid(0);
       form.dataset.validation = "1";
     } else {
       invalid("نام باید بین 5 تا 25 کاراکتر باشد", 0);
       form.dataset.validation = "0";
     }
-    if (inputL && 5 < inputL.length && inputL.length < 25) {
+    if (inputL && 3 < inputL.length && inputL.length < 25) {
       valid(1);
       form.dataset.validation = "1";
     } else {
@@ -200,6 +202,11 @@ const fun = () => {
       form.dataset.validation = "0";
     }
   };
+  // ..............Local Storage Codes.................................................
+  const firstState = localStorage.getItem("items");
+  const parsedItems = JSON.parse(firstState);
+  state = parsedItems;
+  renderList(parsedItems);
   //   ..........................................................................................
   modalBg.addEventListener("click", handleHideModal);
   close.addEventListener("click", handleHideModal);
